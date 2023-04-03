@@ -1,0 +1,72 @@
+﻿@model IEnumerable<KuShop.ViewModels.PdVM>
+@{
+    ViewData["Title"] = "สินค้าในร้าน";
+}
+
+
+@{
+    var stext = ViewBag.stext;
+}
+
+
+<h1 class="text-success">สินค้าในร้าน</h1>
+@if (TempData["Errormessage"] != null)
+{
+    <div class="alert alert-warning">@TempData["Errormessage"]</div>
+}
+@if (TempData["Successmessage"] != null)
+{
+    <div class="alert alert-info">@TempData["Successmessage"]</div>
+}
+
+<form asp-controller="Home" asp-action="Shop">
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-9">
+            <!--
+            <a class="btn btn-primary" asp-action="Create">
+                <i class="bi bi-plus-lg"></i>เพิ่ม
+            </a>
+            -->
+        </div>
+
+        <div class="col-sm-6 col-md-6 col-lg-3 text-end">
+            <div class="input-group">
+                <span class="input-group-text">ค้นหา</span>
+                <input type="text" name="stext" class="form-control" value="@stext" />
+                <button type="submit" class="btn btn-secondary"><i class="bi-search"></i></button>
+            </div>
+        </div>
+
+    </div>
+</form>
+<br />
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-3 col-md-6 col-sm-12" >
+        
+            <div class="card mt-3" style="width: 18rem;">
+                @{
+                    var pdimg = "/imagepd/" + item.PdId + ".jpg"; 
+                }
+                <img src="@pdimg" class="card-img-top">
+                <div class="card-body " >
+                    <h5 class="card-title">@item.PdName </h5>
+                    <h6 class="card-title"> <span class="text-dark">@item.PdPrice.Value.ToString("#,###.00")  บาท </span> </h6>
+                    <h6 class="card-subtitle mb-2 text-muted">@item.BrandName</h6>
+                    <a asp-controller="Product" asp-action="Show" asp-route-id="@item.PdId" class="card-link">
+                        รายละเอียด
+                    </a>
+                    <a asp-controller="Cart" asp-action="AddDtl" asp-route-pdid="@item.PdId" class="text-danger  card-link float-end">
+                        <i class="bi-cart-plus-fill" style="font-size:1.6rem"></i>
+                    </a>
+                </div>
+            </div>
+        
+      
+        </div>
+
+    }
+
+</div>
+

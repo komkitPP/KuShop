@@ -1,0 +1,107 @@
+﻿@model KuShop.Models.Customer
+
+@{
+    ViewData["Title"] = "Show";
+}
+
+<!--แสดงชื่อของลูกค้า-->
+<h1 class="text-danger opacity-75">@Html.DisplayFor(model => model.CusName)</h1>
+
+<div>
+    <hr />
+    <!--สร้าง Row ใหม่ เพื่อแบ่งการแสดง รูป และ ข้อมูล-->
+    <div class="row">
+        <!--Col สำหรับแสดงรูป-->
+        <div class="col-lg-6 col-md-6 col-sm-12 ">
+            <!--รูปที่แสดงจะรับชื่อ และที่ตำแหน่งที่เก็บจาก Controller-->
+            <img src="@ViewBag.ImgFile" width="250" class="shadow " />
+            <div class="row mt-2">
+                <div class="col">
+                    <!--Link ไปส่วน Delete ต้องการ การยืนยันออกจากระบบ-->
+                    <a class="btn btn-sm btn-danger" onclick="return confirm('ยืนยันลบรูปภาพ')"
+                       asp-action="ImgDelete" asp-route-id="@Model?.CusId">
+                        <i class="bi bi-x-lg"></i>&nbsp;&nbsp;ลบรูปภาพ
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!--Col สำหรับแสดงข้อมูลผู้ใช้-->
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <!--ยุบส่วนแสดงข้อมูล (ลบ Password ออก) -->
+            <dl class="row">
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.CusName)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.CusName)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.CusLogin)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.CusLogin)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.CusEmail)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.CusEmail)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.CusAdd)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.CusAdd)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.StartDate)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.LastLogin)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.LastLogin)
+                </dd>
+            </dl>
+            <!--เพิ่มส่วนที่ทำการUploadรูปภาพ-->
+            <div class="row">
+                <div class="col-sm-12">
+                    <!--ในการ Upload File ต้องระบุ enctype="multipart/form-data" -->
+                    <form method="post" enctype="multipart/form-data" asp-action="ImgUpload">
+                        <!--เป็นการ Post เราต้องแอบส่ง id ของfileที่จะ Upload ไปด้วย-->
+                        <input name="theid" type="hidden" class="form-control" value="@Model.CusId" />
+                        <div class="input-group ">
+                            <!--กำหนด type เป็น File เพื่ออ่านค่า File
+                                กำหนดชนิดของ File โดยระบุที่ accept = ""
+                                ถ้ารับแต่ jpeg ก็กำหนด accept="image/jpeg"
+                                ถ้ารับ File รูปทุกชนิด กำหนด accept="image/* "
+                                หรือระบุเฉพาะ accept="image/png, image/gif, image/jpeg"
+                                หรือ accept="application/pdf,application/vnd.ms-excel"
+                                หรือ accept= "application/msword, application/vnd.ms-powerpoint" >
+                            -->
+                            <input class="form-control" name="imgfiles" type="file"
+                                   accept="image/jpeg" required />
+                            <input class="btn  btn-success" type="submit" value="Upload" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="text-end">
+    <a asp-action="Edit" asp-route-id="@Model?.CusId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script>
+
+    function cf_delete() {
+        return confirm("ยืนยันลบรูปภาพ")
+    }
+</script>

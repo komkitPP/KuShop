@@ -1,0 +1,191 @@
+﻿<!--เรียกใช้ Library-->
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+
+@{
+    var CusId = HttpContextAccessor.HttpContext.Session.GetString("CusId");
+    var CartId = HttpContextAccessor.HttpContext.Session.GetString("CartId");
+    var CartMoney = HttpContextAccessor.HttpContext.Session.GetString("CartMoney");
+    var CartQty = HttpContextAccessor.HttpContext.Session.GetString("CartQty");
+    var CusName = HttpContextAccessor.HttpContext.Session.GetString("CusName");
+
+    var StfId = HttpContextAccessor.HttpContext.Session.GetString("StfId");
+}
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <link rel="icon" href="./img/logo.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - KuShop</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/KuShop.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/bs5/icons/bootstrap-icons.css"  />
+
+    <!--Datetime Picker-->
+    <link href="~/css/jquery.datetimepicker.min.css" rel="stylesheet" />
+
+</head>
+<body>
+
+     <header style ="width : 1000px">
+        <img src="/img/0l.jpg" />
+     </header>
+    
+
+     
+
+          
+   
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark bg-opacity-10 border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="/img/game.png" width="40" />  GAME-BOY
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (StfId == null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Shop">
+                                    ข้อมูลสินค้า
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Cart" 
+                                asp-action="List" asp-route-cusid="@CusId">
+                                    ประวัติการซื้อ
+                                </a>
+                            </li>
+                            <!--ทำส่วน DropDown สำหรับ Menu Staff-->
+                        }
+                        else
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" 
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    จัดการระบบ
+                                </a>
+                                <ul class="dropdown-menu bg-light">
+                                    <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">ข้อมูลสินค้า</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Supplier" asp-action="Index">ข้อมูลSupplier</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Buying" asp-action="Index" >ซื้อสินค้าเข้าร้าน</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item">กำหนดUser</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" 
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    รายงาน
+                                </a>
+                                <ul class="dropdown-menu bg-light">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Report" asp-action="SaleDaily">
+                                            สินค้าขายรายวัน
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Report" asp-action="SaleMonthly">
+                                            สินค้าขายรายเดือน
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item">สินค้าเข้ารายวัน</a></li>
+                                    <li><a class="dropdown-item">สินค้าเข้ารายเดือน</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Report" asp-action="StockTran">
+                                            รายงานเคลื่อนไหวสินค้า
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item">พนักงานทำงานรายวัน</a></li>
+                                    <li><a class="dropdown-item">สรุปพนักงานทำงานรายเดือน</a></li>
+                                </ul>
+                            </li>
+                        }
+                        <!---->
+                    </ul>
+                </div>
+                <!-- class "d-inline-flex"" จัดให้แต่ละ dom แสดงแถวต่อกัน -->
+                <div class="text-end d-inline-flex">
+                    @if (CartId!=null)
+                    {
+                        <a class="btn btn-success opacity-50 text-white mx-2"
+                            asp-controller="Cart" asp-action="Show" asp-route-cartid="@CartId">
+                            <i class="bi-cart-fill"></i>ตะกร้าสินค้า[@CartMoney] [@CartQty]
+                        </a>
+                    }
+                    <!--ถ้ามี Session CusId ให้แสดง Link สำหรับแสดงข้อมูลผู้ใช้ และ Link สำหรับการ Logout -->
+                    @if (CusName!=null)
+                    {
+                        <!--แสดง Session Cusname-->
+                        <a class="btn btn-success text-white mx-2" 
+                            asp-controller="Customer" asp-action="Show" asp-route-id="@CusId">
+                            <i class="bi-person-fill"></i>@CusName
+                        </a>
+                        <!--สร้างปุ่มสำหรับการ Logout และ เรียก Function Javascript ยืนยันการ Logout-->
+                        <a class="btn btn-danger text-white" asp-controller="Home" asp-action="Logout"
+                       onclick="return confirm('ออกจากระบบ')">
+                            <i class="bi bi-box-arrow-right "></i>&nbsp;&nbsp;logout
+                        </a>
+                    }
+                    else
+                    {
+                        if (StfId==null)
+                        {
+                          
+
+                            <a class="btn btn-success text-white mx-2"
+                       asp-controller="Home" asp-action="Login" >
+                                <i class="bi-person-fill"></i>Login
+                            </a>
+                            <!--สร้างปุ่มสำหรับการ Logout และ เรียก Function Javascript ยืนยันการ Logout-->
+                            <a class="btn btn-primary text-white" asp-controller="Staff" asp-action="login"
+                       >
+                                <i class=" "></i>&nbsp;&nbsp;Staff login
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-danger text-white" asp-controller="Staff" asp-action="Logout"
+                                onclick="return confirm('ออกจากระบบ')">
+                                <i class="bi bi-box-arrow-right "></i>&nbsp;&nbsp;logout
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - KuShop - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <!--Datetime Picker-->
+    <script src="~/js/jquery.datetimepicker.full.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

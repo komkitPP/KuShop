@@ -1,0 +1,77 @@
+﻿@model IEnumerable<KuShop.ViewModels.PdVM>
+
+
+
+@{
+    var stext = ViewBag.stext;
+}
+@if (TempData["ErrorMassage"] != null)
+{
+    <div class="alert alert-warning">@TempData["ErrorMassage"]</div>
+}
+
+<style>
+    a{
+        text-decoration: none;
+    }
+</style>
+<h1 class="text-success">สินค้า</h1>
+
+<form asp-controller="Product" asp-action="Index">
+    <div class="row">
+        <div class="col-sm-6 col-md-8 col-lg-9">
+            <a class="btn btn-primary" asp-action="Create">
+                <i class="bi bi-plus-lg"></i>    เพิ่ม    
+            </a>
+        </div>
+
+        <div class="col-sm-6 col-md-4 col-lg-3 text-end">
+            <div class="input-group">
+                <span class="input-group-text">ค้นหา</span>
+                <input type="text" name="stext" class="form-control" value="@stext"/>
+                <button type="submit" class="btn btn-secondary"><i class="bi-search"></i></button>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<table class="table table-borderless table-hover">
+    <tr>
+        <th></th>
+        <th>ชื่อสินค้า</th>
+        <th>ประเภท</th>
+        <th>ยี่ห้อ</th>
+        <th class="text-end">ราคาขาย</th>
+        <th class="text-center">คงเหลือ</th>
+        <th></th>
+        <th></th>
+    </tr>
+    @{  var i = 0;}
+    @foreach (var item in Model)
+    {
+        i++;
+        <tr>
+            <td>@i</td>
+            <td>
+                <a asp-action="Show" asp-route-id="@item.PdId">
+                @item.PdName
+                </a>
+            </td>
+            <td>@item.PdtName</td>
+            <td>@item.BrandName</td>
+            <td class="text-end">@item.PdPrice</td>
+            <td class="text-end">@item.PdStk</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.PdId">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.PdId">
+                    <i class="bi bi-x-lg text-danger"></i>
+                </a>
+            </td>
+        </tr>
+    }
+</table>

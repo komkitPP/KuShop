@@ -1,0 +1,112 @@
+﻿@using KuShop.ViewModels;
+@using System.Globalization;
+@model dynamic;
+
+@{
+    string sDate = "";
+    string eDate = "";
+
+    CultureInfo us = new CultureInfo("en-US");
+    var theMonth = DateTime.Now.Month;
+    var theYear = DateTime.Now.Year;
+    if (ViewBag.sDate != null)
+        sDate = ViewBag.sDate;
+    else
+    {
+        DateTime thedate = new DateTime(theYear, theMonth, 1);
+        sDate = thedate.ToString("yyyy-MM-dd", us);
+    }
+
+    if (ViewBag.eDate != null)
+        eDate = ViewBag.eDate;
+    else
+    {
+        DateTime thedate = new DateTime(theYear, theMonth, 1).AddMonths(1).AddDays(-1);
+        eDate = thedate.ToString("yyyy-MM-dd", us);
+    }
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-warning">@TempData["ErrorMessage"]</div>
+}
+<form asp-controller="Report" asp-action="StockTran">
+    <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-4">
+            <h5 class="text-success">รายงานเคลื่อนไหวสินค้า</h5>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-8 text-end">
+            <div class="input-group">
+                <select name="PdId" class="form-select" asp-items="ViewBag.Pd"></select>
+                <span class="input-group-text">ระหว่างวันที่</span>
+                <input type="text" name="sDate" id="sDate" class="form-control" value="@sDate" />
+                <span class="input-group-text">-</span>
+                <input type="text" name="eDate" id="eDate" class="form-control" value="@eDate" />
+                <button type="submit" class="btn btn-secondary"><i class="bi-search"></i></button>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="container">
+    <table class="table mt-3  table-hover">
+        <tr>
+            <th colspan="3" class="text-success">สินค้าเข้า</th>
+        </tr>
+        <tr class="bg-light">
+            <th>
+            </th>
+            <th>วันที่</th>
+            <th class="text-end">จำนวน</th>
+        </tr>
+        @{
+            var i = 0;
+        }
+        @foreach (RepStkTran StkIn in Model.In)
+        {
+            i++;
+            <tr>
+                <td>@i</td>
+                <td>@StkIn.TranDate.Value.ToString("yyyy-MMM-dd",us) </td>
+                <td class="text-end">@StkIn.TranQty</td>
+            </tr>
+        }
+
+        <tr>
+            <th colspan="3" class="text-danger">สินค้าออก</th>
+        </tr>
+        <tr class="bg-light">
+            <th>
+            </th>
+            <th>วันที่</th>
+            <th class="text-end">จำนวน</th>
+        </tr>
+        @{
+            i = 0;
+        }
+        @foreach (RepStkTran StkOut in Model.Out)
+        {
+            i++;
+            <tr>
+                <td>@i</td>
+                <td>@StkOut.TranDate.Value.ToString("yyyy-MMM-dd",us) </td>
+                <td class="text-end">@StkOut.TranQty</td>
+            </tr>
+        }
+    </table>
+</div>
+<!--กำหนดพื้นที่ Script -->
+@section Scripts {
+    <script>
+        //ระบุ id ที่ต้องการใช้
+        $('#sDate').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: 'Y-m-d'
+        })
+        $('#eDate').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: 'Y-m-d'
+        })
+
+    </script>
+}

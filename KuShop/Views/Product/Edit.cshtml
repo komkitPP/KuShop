@@ -1,0 +1,68 @@
+﻿@model KuShop.Models.Product
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+        <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.ErrorMessage");
+            };
+        </script>
+}
+
+<h4>แก้ไขสินค้า</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <!--ข้อมูลที่ส่งผ่าน Form จะเป็นการทำงานแบบ Post
+            มีการกำหนดว่าให้ไป Action ที่ Method Create [Post] -->
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PdId" />
+            <div class="form-group">
+                <label asp-for="PdName" class="control-label"></label>
+                <input asp-for="PdName" class="form-control" />
+                <span asp-validation-for="PdName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PdtId" class="control-label"></label>
+                <!--<input asp-for="PdtId" class="form-control" />-->
+                <!--ViewData กับ ViewBag สลับการแสดงผลได้ แต่การแสดงบน View ใช้ ViewBag ง่ายกว่า-->
+                <select asp-for="PdtId" class="form-select" asp-items="ViewBag.Pdt"></select>
+                <span asp-validation-for="PdtId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BrandId" class="control-label"></label>
+                <!--<input asp-for="BrandId" class="form-control" />-->
+                <!--ViewData กับ ViewBag สลับการแสดงผลได้ แต่การแสดงบน View ใช้ ViewBag ง่ายกว่า-->
+                <select asp-for="BrandId" class="form-select" asp-items="ViewBag.Brand"></select>
+                <span asp-validation-for="BrandId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PdPrice" class="control-label"></label>
+                <input asp-for="PdPrice" class="form-control" />
+                <span asp-validation-for="PdPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PdStk" class="control-label"></label>
+                <input asp-for="PdStk" class="form-control" />
+                <span asp-validation-for="PdStk" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="บันทึก" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">กลับหน้าสินค้า</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

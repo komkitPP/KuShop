@@ -1,0 +1,57 @@
+﻿@model KuShop.Models.Product
+
+
+@{
+    ViewData["Title"] = "Show";
+}
+
+<!--แสดงชื่อของลูกค้า-->
+
+
+<div>
+    <hr />
+    <!--สร้าง Row ใหม่ เพื่อแบ่งการแสดง รูป และ ข้อมูล-->
+    <div class="row ">
+        <!--Col สำหรับแสดงรูป-->
+        <div class="col-lg-6 col-md-6 col-sm-12 ">
+            <!--รูปที่แสดงจะรับชื่อ และที่ตำแหน่งที่เก็บจาก Controller-->
+            <img src="@ViewBag.ImgFile" width="350" class="shadow   " height="500" />
+            <div class="row mt-2">
+                <div class="col">
+                    <!--Link ไปส่วน Delete ต้องการ การยืนยันออกจากระบบ-->
+                 
+                </div>
+            </div>
+        </div>
+
+        <!--Col สำหรับแสดงข้อมูลผู้ใช้-->
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <!--ยุบส่วนแสดงข้อมูล (ลบ Password ออก) -->
+            <h4><span>@Model.PdName</span></h4>
+            <h2 class="mt-3"> <span>@Model.PdPrice.Value.ToString("#,###.00")  บาท</span></h2>
+            <hr  style="width : 35rem"/>
+            <!--เพิ่มส่วนที่ทำการUploadรูปภาพ-->
+            <div>
+              
+                <div class="card " style="width : 10rem">
+                <a  asp-controller="Cart" asp-action="AddDtl" asp-route-pdid="@Model.PdId" class="text-white bg-dark ">
+                    
+                        <h3 class="text-center">ซื้อสินค้า</h3>
+                </a>
+                </div>
+                <div>
+                    <hr  style="width : 35rem"/>
+                 <div class="mt-3">
+                        <h5>สถานะสินค้า : @Model.Active</h5>
+                 </div>
+                    <div class="mt-3">
+                        <a asp-action="Index" asp-controller="Product">กลับหน้าหลัก</a>
+                    </div>
+            </div>
+            <hr>
+            <h1>รายละเอียดสินค้า </h1>
+            
+            <div>
+                komkit
+                </div>
+

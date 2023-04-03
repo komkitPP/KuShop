@@ -1,0 +1,38 @@
+﻿@model IEnumerable<KuShop.Models.Supplier>
+
+    @{
+
+}
+<table class="table">
+    <thead>
+        <tr>
+         <th>ลำดับ</th>
+        <th>ชื่อบริษัท</th>
+            <th>เบอร์ติดต่อ</th>
+         
+            <th>อีเมลล์</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{var i = 0;}
+        @foreach (var item in Model)
+      
+               {
+        i++; 
+        <tr>
+            <td>@i</td>
+            <td>@item.SupName</td>
+                <td>@item.SupTel</td>
+                
+                <td>@item.SupEmail</td>
+                <td>
+                    <a asp-controller="Supplier" asp-action="show"  class="card-link">
+                        รายละเอียด
+                    </a>
+                </td>
+        
+        </tr>
+    }
+        </tbody>
+ 
+</table>

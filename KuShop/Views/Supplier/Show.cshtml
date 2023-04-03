@@ -1,0 +1,30 @@
+﻿@model KuShop.Models.Supplier
+
+@{
+    ViewData["Title"] = "Show";
+}
+
+<h1>Show</h1>
+<h3 class="text-danger">ต้องจัดการหน้า+รูป+ซื้อ</h3>
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SupName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SupId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SupEmail)
+        </dt>
+     
+    </dl>
+</div>
+<div>
+    <a asp-action="Index" asp-controller="Product" >กลับหน้าหลัก</a>
+    <a asp-controller="Cart" asp-action="AddDtl" asp-route-pdid="@Model.SupId" class="text-danger  card-link">
+        <i class="bi-cart-plus-fill" style="font-size:1.6rem"></i>
+    </a>
+</div>

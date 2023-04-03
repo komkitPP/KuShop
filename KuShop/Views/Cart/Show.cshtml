@@ -1,0 +1,91 @@
+﻿@using KuShop.ViewModels;
+@using System.Globalization;
+@model dynamic;
+
+@{
+    CultureInfo us = new CultureInfo("en-US");
+}
+<div class="container">
+    @if (TempData["Errormessage"] != null)
+    {
+        <div class="alert alert-warning">@TempData["Errormessage"]</div>
+    }
+    
+    @{
+        string cartcf = "";//สร้างตัวแปรเก็บ CartCF เพื่อเอาไปใช้กับส่วน Detail ด้วย
+     }
+    <!--อ่านค่าจาก Model เป็น Object-->
+    @foreach (Cart master in Model.Master )
+    {
+        cartcf= master.CartCf;
+        <div class="card bg-light">
+            <div class="card-body">
+                <h4 class="card-title text-primary opacity-75">คำสั่งซื้อเลขที่ @master.CartId</h4>
+                <h5 class="card-subtitle mt-2 text-muted">
+                    สั่งซื้อวันที่ @master.CartDate.Value.ToString("yyyy-MMM-dd",us)
+                </h5>
+                <div class="text-danger text-end">
+                    จำนวนสินค้า @master.CartQty ยอดเงิน @master.CartMoney.Value.ToString("#,###.##")  บาท
+                </div>
+                <hr>
+                @if (cartcf != "Y")
+                { //ถ้ายังไม่มีการยืนยัน ก็ ลบตะกร้า และยืนยันสั่งสินค้าได้
+                    <a class="btn btn-danger" asp-controller="Cart" asp-action="Delete"
+                        asp-route-cartid="@master.CartId" onclick=" return confirm('ยืนยันลบตะกร้า')" >
+                        <i class="bi-cart-x-fill"></i> ลบตะกร้าสินค้า
+                    </a>
+                    <a class="btn btn-primary float-end" asp-controller="Cart" asp-action="Confirm" 
+                        asp-route-cartid="@master.CartId" onclick=" return confirm('ยืนยันสั่งสินค้า')">
+                        <i class="bi-currency-dollar"></i> ยืนยันสั่งสินค้า
+                    </a>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<div class="container">
+    <table class="table mt-3  table-hover">
+        <tr class="bg-light">
+            <th></th>
+            <th>สินค้า</a>
+            </th>
+            <th></th>
+            <th class="text-end">ราคา</th>
+            <th class="text-center">จำนวน</th>
+            <th class="text-end">รวม</th>
+            <th></th>
+        </tr>
+        @{
+            var i = 0;
+        }
+        @foreach (CtdVM detail in Model.Detail)
+        {
+            i++;
+            <tr>
+                <td>@i</td>
+                <td>
+                    <a asp-action="Show" asp-controller="Product" asp-route-id="@detail.PdId"> 
+                        @detail.PdId
+                    </a>
+                </td>
+                <td>@detail.PdName</td>
+                <td class="text-end">@detail.CdtlPrice.Value.ToString("#,###.##")</td>
+                <td class="text-center">@detail.CdtlQty</td>
+                <td class="text-end">@detail.CdtlMoney.Value.ToString("#,###.##")</td>
+                <td class="text-center">
+                    @if(cartcf!="Y")
+                    {
+                        <a asp-controller="Cart" asp-action="DeleteDtl" 
+                            asp-route-pdid="@detail.PdId" asp-route-cartid="@detail.CartId"
+                            onclick=" return confirm('ยืนยันลบสินค้าที่เลือก')">
+                        
+                            <i class="bi-x-lg text-danger"></i>
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+    
+</div>
